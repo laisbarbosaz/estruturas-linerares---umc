@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+  <title>Previsão de Nota por Horas de Estudo</title>
+  # importando a biblioteca TensorFlow.js para criar e treinar o modelo de machine learning
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+</head>
+ 
+<body>
+ 
+<h1>Previsão de Nota</h1>
+ 
+<p>Digite as horas de estudo:</p>
+ # campo de entrada para o usuário digitar as horas de estudo, que será usado para prever a nota
+<input type="number" id="horas">
+<button onclick="preverNota()">Prever Nota</button>
+ 
+<h3 id="resultado"></h3>
+ 
+<script>
+ 
+ let modelo;
+ 
+async function treinarModelo() {
+// criando os dados de treinamento para o modelo, onde as horas de estudo estão relacionadas às notas obtidas
+  const horasEstudo = tf.tensor2d([1,2,3,4,5,6], [6,1]);
+  const notas = tf.tensor2d([2,4,6,8,9,10], [6,1]);
+  // criando um modelo sequencial simples com uma camada densa, que é adequada para problemas de regressão
+  modelo = tf.sequential();
+ // adicionando uma camada densa com 1 unidade e especificando a forma de entrada
+  modelo.add(tf.layers.dense({
+    units: 1,
+    inputShape: [1]
+  }));
+ // como o modelo vai aprender a prever as notas, é necessário compilar o modelo especificando a função de perda e o otimizador
+  modelo.compile({
+    loss: 'meanSquaredError',
+    optimizer: 'sgd'
+  });
+ // treinando o modelo usando os dados de horas de estudo e notas, e especificando o número de épocas para o treinamento
+  await modelo.fit(horasEstudo, notas, {
+    epochs: 500
+  });
+ 
+}
+// função para quando o usuário clicar no botão "Prever Nota", o modelo irá usar as horas de estudo digitadas para prever a nota correspondente
+async function preverNota(){
+ 
+  const valor = document.getElementById("horas").value;
+ 
+  const entrada = tf.tensor2d([Number(valor)], [1,1]);
+ 
+  const previsao = modelo.predict(entrada);
+ 
+  const resultado = await previsao.data();
+ 
+  // exibindo o resultado da previsão para o usuário, arredondando a nota prevista para uma casa decimal
+  document.getElementById("resultado").innerText =
+    "Nota prevista: " + resultado[0].toFixed(1);
+ 
+}
+ 
+treinarModelo();
+ 
+</script>
+ 
+</body>
+</html>
