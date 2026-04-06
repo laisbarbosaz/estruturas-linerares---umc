@@ -1,7 +1,5 @@
 # estruturas-linerares---umc
-Conteúdo das aulas
-
-- Aula 06.04.2026
+- Aula (Tarefa do dia 06.04.2026)
 O que foi alterado?
 - Tema alterado de horas de estudo e nota para calorias por minutos de exercício
 - Título da página modificado
